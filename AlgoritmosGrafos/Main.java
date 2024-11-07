@@ -30,20 +30,20 @@ public class Main {
                     "Selecione a estrada que deseja percorrer: \n" +
                     "1: Colorado \n" +
                     "2: San Francisco Bay Area \n" +
-                    "3: New York City \n");
+                    "3: New York City");
 
             int filechoice = scan.nextInt();
             String inputFileName = "";
 
             switch (filechoice) {
                 case 1:
-                    inputFileName = "/mnt/data/USA-road-d.COL.gr";
+                    inputFileName = "USA-road-d.COL.gr";
                     break;
                 case 2:
-                    inputFileName = "/mnt/data/USA-road-d.BAY.gr";
+                    inputFileName = "USA-road-d.BAY.gr";
                     break;
                 case 3:
-                    inputFileName = "/mnt/data/USA-road-d.NY.gr";
+                    inputFileName = "USA-road-d.NY.gr";
                     break;
                 default:
                     System.out.println("Opção inválida. O programa será encerrado");
