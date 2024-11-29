@@ -3,29 +3,48 @@ package AlgoritmosGrafos;
 import java.util.*;
 
 public class Dijkstra {
-    public int[] dijkstra(List<List<Edge>> graph, int source) {
-        int numVertices = graph.size();
-        int[] distancias = new int[numVertices];
-        Arrays.fill(distancias, Integer.MAX_VALUE); // Inicializa as distâncias com infinito
-        distancias[source] = 0;
 
-        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingInt(e -> e.peso));
-        pq.add(new Edge(source, source, 0)); // Adiciona o vértice de origem
+    public static Map<String, Object> execute(List<List<Edge>> graph, int source, int destination, int numVertices) {
+        int[] distances = new int[numVertices + 1];
+        Edge[] predecessors = new Edge[numVertices + 1];
+        boolean[] visited = new boolean[numVertices + 1];
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        distances[source] = 0;
+        pq.offer(new int[]{source, 0});
 
         while (!pq.isEmpty()) {
-            Edge current = pq.poll();
-            int u = current.destino;
+            int[] current = pq.poll();
+            int currentVertex = current[0];
 
-            for (Edge vizinho : graph.get(u)) {
-                int v = vizinho.destino;
-                int peso = vizinho.peso;
+            if (visited[currentVertex]) continue;
+            visited[currentVertex] = true;
 
-                if (distancias[u] + peso < distancias[v]) {
-                    distancias[v] = distancias[u] + peso;
-                    pq.add(new Edge(u, v, distancias[v]));
+            for (Edge edge : graph.get(currentVertex)) {
+                if (!visited[edge.destino]) {
+                    int newDist = distances[currentVertex] + edge.peso;
+                    if (newDist < distances[edge.destino]) {
+                        distances[edge.destino] = newDist;
+                        predecessors[edge.destino] = edge;
+                        pq.offer(new int[]{edge.destino, newDist});
+                    }
                 }
             }
         }
-        return distancias;
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("distances", distances);
+        result.put("predecessors", predecessors);
+        return result;
+    }
+
+    public static List<Edge> reconstructPath(Edge[] predecessors, int destination) {
+        List<Edge> path = new ArrayList<>();
+        for (int at = destination; predecessors[at] != null; at = predecessors[at].origem) {
+            path.add(predecessors[at]);
+        }
+        Collections.reverse(path);
+        return path;
     }
 }

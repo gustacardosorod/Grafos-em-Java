@@ -8,8 +8,8 @@ public class Prim {
         boolean[] visitado = new boolean[numVertices];
         PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingInt(e -> e.peso));
         List<Edge> mst = new ArrayList<>();
+        int pesoTotal = 0;
 
-        // Começa do vértice 1 (ou qualquer vértice inicial)
         visitado[1] = true;
         pq.addAll(graph.get(1));
 
@@ -19,6 +19,7 @@ public class Prim {
 
             visitado[e.destino] = true;
             mst.add(e);
+            pesoTotal += e.peso;
 
             for (Edge next : graph.get(e.destino)) {
                 if (!visitado[next.destino]) {
@@ -26,7 +27,12 @@ public class Prim {
                 }
             }
         }
+
+        System.out.println("Árvore Geradora Mínima (Prim): " + mst);
+        System.out.println("Peso total da MST: " + pesoTotal);
+
         return mst;
     }
 }
+
 

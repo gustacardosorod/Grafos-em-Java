@@ -1,9 +1,10 @@
 package AlgoritmosGrafos;
+
 import java.io.*;
 import java.util.*;
 
 public class Main {
-    
+
     static List<List<Edge>> graph;
     static List<Edge> edges;
     static int numVertices;
@@ -15,10 +16,10 @@ public class Main {
             System.out.println("");
             System.out.println(
                     "Escolha o algoritmo de grafo -> \n" +
-                    "1: Algoritmo de Dijkstra \n" +
-                    "2: Algoritmo de Kruskal \n" +
-                    "3: Algoritmo de Prim \n" +
-                    "Digite 4 para fechar a aplicação");
+                            "1: Algoritmo de Dijkstra \n" +
+                            "2: Algoritmo de Kruskal \n" +
+                            "3: Algoritmo de Prim \n" +
+                            "Digite 4 para fechar a aplicação");
 
             int choice = scan.nextInt();
 
@@ -28,9 +29,9 @@ public class Main {
 
             System.out.println(
                     "Selecione a estrada que deseja percorrer: \n" +
-                    "1: Colorado \n" +
-                    "2: San Francisco Bay Area \n" +
-                    "3: New York City");
+                            "1: Colorado \n" +
+                            "2: San Francisco Bay Area \n" +
+                            "3: New York City");
 
             int filechoice = scan.nextInt();
             String inputFileName = "";
@@ -58,18 +59,59 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Digite o vértice de origem para o Dijkstra:");
+                    System.out.println("Digite o vértice de origem para iniciar o Dijkstra:");
                     int source = scan.nextInt();
 
-                    // Executa o algoritmo de Dijkstra
-                    int[] distancias = new Dijkstra().dijkstra(graph, source);
-
-                    // Exibe as distâncias calculadas
-                    System.out.println("Distâncias a partir do vértice " + source + ":");
-                    for (int i = 1; i < distancias.length; i++) {
-                        System.out.println("Vértice " + i + ": " + distancias[i]);
+                    // Verifica se o vértice de origem está dentro do intervalo válido
+                    if (source < 1 || source > numVertices) {
+                        System.out.println(
+                                "Vértice de origem inválido. Certifique-se de que está entre 1 e " + numVertices);
+                        break;
                     }
-                    algorithm = "Dijkstra";
+
+                    // Nome do arquivo de saída
+                    String outputFileName = "Dijkstra" + inputFileName + ".txt";
+
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName))) {
+                        // Adiciona um cabeçalho ao arquivo
+                        writer.write("Resultados do Algoritmo de Dijkstra\n");
+                        writer.write("-----------------------------------\n");
+
+                        // Itera automaticamente do vértice de origem até o fim do grafo
+                        for (int destination = source + 1; destination <= numVertices; destination++) {
+                            // Executa o algoritmo de Dijkstra
+                            Map<String, Object> result = Dijkstra.execute(graph, source, destination, numVertices);
+                            int[] distances = (int[]) result.get("distances");
+                            // Edge[] predecessors = (Edge[]) result.get("predecessors");
+
+                            if (distances[destination] == Integer.MAX_VALUE) {
+                                String noPathMessage = "Não há caminho do vértice " + source + " ao vértice "
+                                        + destination;
+                                System.out.println(noPathMessage);
+                                writer.write(noPathMessage + "\n");
+                            } else {
+                                String summary = String.format(
+                                        "Vértice de origem: %d, Vértice final: %d, Distância total: %d",
+                                        source, destination, distances[destination]);
+                                // System.out.println(summary);
+                                writer.write(summary + "\n");
+
+                                // Adiciona detalhes das arestas (se necessário)
+                                /*
+                                 * List<Edge> path = Dijkstra.reconstructPath(predecessors, destination);
+                                 * for (Edge edge : path) {
+                                 * String.format("vértice de origem: %d, vértice final: %d, peso: %d",
+                                 * edge.origem, edge.destino, edge.peso);
+                                 * 
+                                 * }
+                                 */
+                            }
+                        }
+
+                        System.out.println("Os resultados foram salvos no arquivo: " + outputFileName);
+                    } catch (IOException e) {
+                        System.out.println("Erro ao escrever no arquivo: " + e.getMessage());
+                    }
                     break;
 
                 case 2:

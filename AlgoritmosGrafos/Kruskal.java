@@ -4,16 +4,22 @@ import java.util.*;
 
 public class Kruskal {
     public List<Edge> kruskal(int numVertices, List<Edge> edges) {
-        Collections.sort(edges, Comparator.comparingInt(e -> e.peso)); // Ordena as arestas pelo peso
+        Collections.sort(edges, Comparator.comparingInt(e -> e.peso));
         UnionFind uf = new UnionFind(numVertices);
         List<Edge> mst = new ArrayList<>();
+        int pesoTotal = 0;
 
         for (Edge e : edges) {
-            if (uf.find(e.origem) != uf.find(e.destino)) { // Verifica se a aresta forma um ciclo
+            if (uf.find(e.origem) != uf.find(e.destino)) {
                 uf.union(e.origem, e.destino);
-                mst.add(e); // Adiciona a aresta à MST
+                mst.add(e);
+                pesoTotal += e.peso;
             }
         }
+
+        System.out.println("Árvore Geradora Mínima (Kruskal): " + mst);
+        System.out.println("Peso total da MST: " + pesoTotal);
+
         return mst;
     }
 }
