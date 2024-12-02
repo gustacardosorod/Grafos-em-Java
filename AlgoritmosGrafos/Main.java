@@ -120,11 +120,35 @@ public class Main {
                     // Executa o algoritmo de Kruskal
                     List<Edge> mstKruskal = new Kruskal().kruskal(numVertices, edges);
 
-                    // Exibe as arestas da MST
-                    System.out.println("Arestas da Árvore Geradora Mínima (MST) usando Kruskal:");
+                    // Caminho do arquivo de saída
+                    String outputPathKruskal = "Kruskal" + inputFileName + ".txt";
+
+                    // Conjunto para armazenar vértices únicos
+                    Set<Integer> vertices = new HashSet<>();
+                    int pesoTotal = 0;
+
+                    // Gera o conjunto de vértices e calcula o peso total
                     for (Edge e : mstKruskal) {
-                        System.out.println("Origem: " + e.origem + ", Destino: " + e.destino + ", Peso: " + e.peso);
+                        vertices.add(e.origem);
+                        vertices.add(e.destino);
+                        pesoTotal += e.peso;
                     }
+
+                    // Salvando no arquivo
+                    try (FileWriter writer = new FileWriter(outputPathKruskal)) {
+                        writer.write("Árvore Geradora Mínima (MST) usando Kruskal:\n");
+                        for (Edge e : mstKruskal) {
+                            writer.write(
+                                    "Origem: " + e.origem + ", Destino: " + e.destino + ", Peso: " + e.peso + "\n");
+                        }
+                        writer.write("\nVértices do Caminho Mínimo:\n");
+                        writer.write(vertices.toString() + "\n");
+                        writer.write("Peso total da MST: " + pesoTotal + "\n");
+                    } catch (IOException ex) {
+                        System.err.println("Erro ao salvar o resultado no arquivo: " + ex.getMessage());
+                    }
+
+                    System.out.println("O resultado foi salvo no arquivo: " + outputPathKruskal);
                     algorithm = "Kruskal";
                     break;
 
@@ -134,11 +158,35 @@ public class Main {
                     // Executa o algoritmo de Prim
                     List<Edge> mstPrim = new Prim().prim(graph);
 
-                    // Exibe as arestas da MST
-                    System.out.println("Arestas da Árvore Geradora Mínima (MST) usando Prim:");
+                    // Caminho do arquivo de saída
+                    String outputPathPrim = "Prim" + inputFileName + ".txt";
+
+                    // Conjunto para armazenar vértices únicos
+                    Set<Integer> verticesPrim = new HashSet<>();
+                    int pesoTotalPrim = 0;
+
+                    // Gera o conjunto de vértices e calcula o peso total
                     for (Edge e : mstPrim) {
-                        System.out.println("Origem: " + e.origem + ", Destino: " + e.destino + ", Peso: " + e.peso);
+                        verticesPrim.add(e.origem);
+                        verticesPrim.add(e.destino);
+                        pesoTotalPrim += e.peso;
                     }
+
+                    // Salvando no arquivo
+                    try (FileWriter writer = new FileWriter(outputPathPrim)) {
+                        writer.write("Árvore Geradora Mínima (MST) usando Prim:\n");
+                        for (Edge e : mstPrim) {
+                            writer.write(
+                                    "Origem: " + e.origem + ", Destino: " + e.destino + ", Peso: " + e.peso + "\n");
+                        }
+                        writer.write("\nVértices do Caminho Mínimo:\n");
+                        writer.write(verticesPrim.toString() + "\n");
+                        writer.write("Peso total da MST: " + pesoTotalPrim + "\n");
+                    } catch (IOException ex) {
+                        System.err.println("Erro ao salvar o resultado no arquivo: " + ex.getMessage());
+                    }
+
+                    System.out.println("O resultado foi salvo no arquivo: " + outputPathPrim);
                     algorithm = "Prim";
                     break;
 

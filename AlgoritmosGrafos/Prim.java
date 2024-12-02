@@ -10,7 +10,12 @@ public class Prim {
         List<Edge> mst = new ArrayList<>();
         int pesoTotal = 0;
 
+        // Conjunto para armazenar os vértices únicos
+        Set<Integer> vertices = new HashSet<>();
+
+        // Começa pelo vértice 1 (ajustar conforme necessário)
         visitado[1] = true;
+        vertices.add(1);
         pq.addAll(graph.get(1));
 
         while (!pq.isEmpty()) {
@@ -19,6 +24,7 @@ public class Prim {
 
             visitado[e.destino] = true;
             mst.add(e);
+            vertices.add(e.destino);
             pesoTotal += e.peso;
 
             for (Edge next : graph.get(e.destino)) {
@@ -28,11 +34,13 @@ public class Prim {
             }
         }
 
-        System.out.println("Árvore Geradora Mínima (Prim): " + mst);
+        // Exibe no console (opcional)
+        System.out.println("Árvore Geradora Mínima (MST) usando Prim:");
+        for (Edge e : mst) {
+            System.out.println("Origem: " + e.origem + ", Destino: " + e.destino + ", Peso: " + e.peso);
+        }
         System.out.println("Peso total da MST: " + pesoTotal);
 
-        return mst;
+        return mst; // Retorna a MST calculada
     }
 }
-
-
